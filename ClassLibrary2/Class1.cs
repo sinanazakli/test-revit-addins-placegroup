@@ -20,6 +20,7 @@ namespace PlaceGroup
           ref string message,
           ElementSet elements)
         {
+            // Hello github
             //Get application and document objects
             UIApplication uiApp = commandData.Application;
             Document doc = uiApp.ActiveUIDocument.Document;
