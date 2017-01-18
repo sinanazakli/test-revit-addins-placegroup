@@ -29,9 +29,12 @@ namespace PlaceGroup
                 //Define a Reference object to accept the pick result.
                 // Reference       pickedRef   = null;
 
+                //Picker Filter
+                GrooupFilter    filter      = new GrooupFilter();
+
                 //Pick a group
                 Selection       sel         = uiApp.ActiveUIDocument.Selection;
-                Reference       pickedRef   = sel.PickObject(ObjectType.Element, "Please select a group");
+                Reference       pickedRef   = sel.PickObject(ObjectType.Element, filter, "Please select a group");
                 Element         elem        = doc.GetElement(pickedRef);
                 Group           group       = elem as Group;
 
@@ -46,6 +49,7 @@ namespace PlaceGroup
             }
             catch (Autodesk.Revit.Exceptions.ArgumentNullException ex)
             {
+                message = ex.Message;
                 return Result.Cancelled;
             }
             catch (Autodesk.Revit.Exceptions.OperationCanceledException ex)
@@ -56,4 +60,17 @@ namespace PlaceGroup
         } // end of Execute
 
     } // end of class Lab1PlaceGroup
+
+    class GrooupFilter : ISelectionFilter
+    {
+        bool ISelectionFilter.AllowElement(Element elem)
+        {
+            return (elem.Category.Id.IntegerValue.Equals((int)BuiltInCategory.OST_IOSModelGroups));
+        }
+
+        bool ISelectionFilter.AllowReference(Reference reference, XYZ position)
+        {
+            return false;
+        }
+    } // end of GroupFilter
 } // end of namespace PlaceGroup
